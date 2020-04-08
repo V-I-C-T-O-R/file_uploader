@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding=utf-8
-
 import os
 
 from flask import Flask, request, Response, render_template,jsonify
@@ -21,7 +18,6 @@ def checkChunk():
 @app.route('/mergeChunks', methods=['POST'])
 def mergeChunks():
     fileName=request.form.get('fileName')
-    print fileName
     md5=request.form.get('fileMd5')
     chunk = 0  # 分片序号
     with open(u'./upload/{}'.format(fileName), 'wb') as target_file:  # 创建新文件
@@ -31,7 +27,7 @@ def mergeChunks():
                 source_file = open(filename, 'rb')  # 按序打开每个分片
                 target_file.write(source_file.read())  # 读取分片内容写入新文件
                 source_file.close()
-            except IOError, msg:
+            except IOError as msg:
                 break
             chunk += 1
             os.remove(filename)  # 删除该分片，节约空间
@@ -52,7 +48,7 @@ def upload():  # 接收前端上传的一个分片
 @app.route('/file/list', methods=['GET'])
 def file_list():
     files = os.listdir('./upload/')  # 获取文件目录
-    files = map(lambda x: x if isinstance(x, unicode) else x.decode('utf-8'), files)  # 注意编码
+    files = map(lambda x: x if isinstance(x, str) else x.decode('utf-8'), files)  # 注意编码
     return render_template('./list.html', files=files)
 
 

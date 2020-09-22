@@ -139,6 +139,8 @@
                     auto : false,
                     //开启分片上传
                     chunked : true,
+                    //多线程批量上传有bug,改成单线程上传
+                    threads: 1,
                     chunkSize : 10 * 1024 * 1024,
 
                     accept : {
